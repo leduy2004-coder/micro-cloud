@@ -15,5 +15,7 @@ public class UserResponse{
     String id;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
     RoleResponse roles;
+    String nickName;
 
+    String email;
 }

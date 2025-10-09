@@ -24,11 +24,8 @@
 	</properties>
 
 	<dependencies>
-		<!-- ✅ Gateway WebFlux (mới nhất, không bị cảnh báo deprecated) -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-gateway-server-webflux</artifactId>
-		</dependency>
+
+
 		<dependency>
 			<groupId>com.java</groupId>
 			<artifactId>common-dto</artifactId>

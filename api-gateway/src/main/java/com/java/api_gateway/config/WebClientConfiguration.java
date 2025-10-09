@@ -1,8 +1,7 @@
 package com.java.api_gateway.config;
 
-
 import com.java.api_gateway.repository.IdentityClient;
-import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -12,24 +11,31 @@ import org.springframework.web.reactive.function.client.support.WebClientAdapter
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
 @Configuration
+@Slf4j
 public class WebClientConfiguration {
-    @NonFinal
+
     @Value("${app.web-client-url}")
-    protected String WEBCLIENT_URL;
+    private String WEBCLIENT_URL;
 
     @Bean
     @LoadBalanced
-    WebClient webClient(){
-        return WebClient.builder()
-                .baseUrl(WEBCLIENT_URL)
-                .build();
+    public WebClient.Builder loadBalancedWebClientBuilder() {
+        log.info("✅ Creating LoadBalanced WebClient.Builder for {}", WEBCLIENT_URL);
+        return WebClient.builder().baseUrl(WEBCLIENT_URL);
     }
 
     @Bean
-    IdentityClient identityClient(WebClient webClient){
-        HttpServiceProxyFactory httpServiceProxyFactory = HttpServiceProxyFactory
-                .builderFor(WebClientAdapter.create(webClient)).build();
+    public WebClient webClient(WebClient.Builder builder) {
+        log.info("Building final WebClient...");
+        return builder.build();
+    }
 
-        return httpServiceProxyFactory.createClient(IdentityClient.class);
+    @Bean
+    public IdentityClient identityClient(WebClient webClient) {
+        log.info("Registering IdentityClient...");
+        HttpServiceProxyFactory factory = HttpServiceProxyFactory
+                .builderFor(WebClientAdapter.create(webClient))
+                .build();
+        return factory.createClient(IdentityClient.class);
     }
 }

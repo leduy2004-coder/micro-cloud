@@ -15,8 +15,3 @@ spring:
   profiles:
     active: default
 
-logging:
-  level:
-    root: INFO
-    org.springframework.cloud: DEBUG
-

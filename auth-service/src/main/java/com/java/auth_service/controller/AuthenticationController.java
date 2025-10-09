@@ -1,7 +1,4 @@
 package com.java.auth_service.controller;
-
-
-
 import com.java.auth_service.dto.ApiResponse;
 import com.java.auth_service.dto.request.AuthenticationRequest;
 import com.java.auth_service.dto.response.AuthenticationResponse;

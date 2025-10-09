@@ -50,6 +50,7 @@ public class UserImpl implements UserService {
         userEntity.setNickName(userRequest.getNickName());
         userEntity.setEmail(userRequest.getEmail());
         userEntity.setStatus(true);
+        userEntity.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         return userRepository.save(userEntity);
     }
 
