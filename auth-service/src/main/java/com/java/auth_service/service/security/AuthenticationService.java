@@ -72,16 +72,6 @@ public class AuthenticationService {
         profileRequest.setUserId(userSaver.getId());
 
 
-//        NotificationEvent notificationEvent = NotificationEvent.builder()
-//                .channel(ChannelNotify.EMAIL)
-//                .recipient(request.getEmail())
-//                .subject("Welcome to ecommerce")
-//                .body("Hello, " + request.getUsername())
-//                .build();
-//
-//        // Publish message to kafka
-//        kafkaTemplate.send("notification-delivery", notificationEvent);
-
         var jwtToken = jwtService.generateToken(userSaver);
         var refreshToken = jwtService.generateRefreshToken(userSaver);
         tokenRedisService.saveRefreshToken(userSaver.getId(), refreshToken);
@@ -95,9 +85,11 @@ public class AuthenticationService {
         var jwtToken = "";
         var refreshToken = "";
         List<RoleResponse> roles;
+        UserEntity user;
         try {
             PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-            UserEntity user = userRepository.findByUsername(request.getUsername()).orElse(null);
+            user = userRepository.findByUsername(request.getUsername()).orElse(null);
+
             assert user != null;
             boolean authenticated = passwordEncoder.matches(request.getPassword(), user.getPassword());
 
@@ -115,6 +107,8 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .nickName(user.getNickName())
+                .email(user.getEmail())
                 .roles(roles)
                 .build();
     }
@@ -144,6 +138,8 @@ public class AuthenticationService {
             tokenRedisService.saveRefreshToken(user.getId(), newRefreshToken);
 
             return AuthenticationResponse.builder()
+                    .nickName(user.getNickName())
+                    .email(user.getEmail())
                     .accessToken(newAccessToken)
                     .refreshToken(newRefreshToken)
                     .build();

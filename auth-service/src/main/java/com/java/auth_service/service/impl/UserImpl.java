@@ -9,6 +9,7 @@ import com.java.auth_service.exception.ErrorCode;
 import com.java.auth_service.repository.UserRepository;
 import com.java.auth_service.service.RoleService;
 import com.java.auth_service.service.UserService;
+import com.java.common_dto.ProfileGetResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -83,7 +84,16 @@ public class UserImpl implements UserService {
         return userResponse;
     }
 
-
+    @Override
+    public ProfileGetResponse getProfile(String id) {
+        UserEntity user = userRepository.findById(id)
+                .orElse(null);
+        if (user == null) {
+            return null;
+        }
+        ProfileGetResponse userResponse = modelMapper.map(user, ProfileGetResponse.class);
+        return userResponse;
+    }
 
     @Override
     public UserResponse findByUsername(String userName) {
