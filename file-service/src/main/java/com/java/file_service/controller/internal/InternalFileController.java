@@ -48,12 +48,5 @@ public class InternalFileController {
                 .build();
     }
 
-    @DeleteMapping(value = "/file/delete-img-by-id")
-    public ApiResponse<Boolean> deleteImageProduct(@RequestBody FileDeleteRequest request) {
 
-        Boolean response = fileService.deleteById(request.getIdsImage());
-        return ApiResponse.<Boolean>builder()
-                .result(response)
-                .build();
-    }
 }
