@@ -1,10 +1,8 @@
 package com.java.product_service.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.java.common_dto.CloudinaryResponse;
 import com.java.common_dto.FileDeleteAllRequest;
-import com.java.common_dto.FileDeleteRequest;
 import com.java.product_service.dto.PageResponse;
 import com.java.product_service.dto.request.ProductCreateRequest;
 import com.java.product_service.dto.request.ProductUpdateImageRequest;
@@ -23,10 +21,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -67,9 +65,17 @@ public class ProductService {
 
         return new PageResponse<>(page, resultPage.getSize(), resultPage.getTotalElements(),resultPage.getTotalPages(),  data);
     }
+    public PageResponse<ProductGetResponse> getProductsByCategoryId(int page, int size, String categoryId) {
+        Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate").descending());
+        var resultPage = productRepository.findAllByCategoryId(categoryId, pageable);
 
+        List<ProductGetResponse> data = resultPage.getContent()
+                .stream().map(this::mapToProductGetResponse)
+                .toList();
 
-    @PreAuthorize("hasRole('ADMIN')")
+        return new PageResponse<>(page, resultPage.getSize(), resultPage.getTotalElements(),resultPage.getTotalPages(),  data);
+    }
+
     public PageResponse<ProductGetResponse> getAllProduct(int page, int size) {
         Pageable pageable = PageRequest.of(page - 1, size, Sort.by("createdDate").descending());
         var resultPage = productRepository.findAll(pageable);
@@ -79,6 +85,24 @@ public class ProductService {
                 .toList();
 
         return new PageResponse<>(page, resultPage.getSize(), resultPage.getTotalElements(),resultPage.getTotalPages(),  data);
+    }
+    public PageResponse<ProductGetResponse> searchProducts(
+            int page,
+            int size,
+            String name,
+            Double minPrice,
+            Double maxPrice,
+            String categoryId
+    ) {
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        Page<ProductEntity> products = productRepository.searchProducts(name, minPrice, maxPrice, categoryId, pageable);
+
+        List<ProductGetResponse> data = products.stream()
+                .map(this::mapToProductGetResponse)
+                .toList();
+        return new PageResponse<>(page, products.getSize(), products.getTotalElements(),products.getTotalPages(), data);
+
     }
 
     public ProductCreateResponse createProduct(ProductCreateRequest request, List<MultipartFile> files) {
@@ -124,15 +148,14 @@ public class ProductService {
 
     public List<CloudinaryResponse> updateImageProduct(ProductUpdateImageRequest request, List<MultipartFile> files) {
         //remove image
-        FileDeleteRequest fileRequest = FileDeleteRequest.builder().idsImage(request.getIdsDelete()).build();
-        boolean status = fileClient.deleteImageProduct(fileRequest).getResult();
+
+        fileClient.deleteAllImageProduct(FileDeleteAllRequest.builder().id(request.getProductId()).build());
 
         //upload image
-        List<CloudinaryResponse> list =  files.stream()
+        return files.stream()
                 .map(file -> fileClient.uploadMediaProduct(file, request.getProductId()).getResult())
                 .toList();
 
-        return list;
     }
 
     public boolean deleteProduct(String productId) {

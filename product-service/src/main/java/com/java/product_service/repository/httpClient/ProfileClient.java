@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "auth-service",
         configuration = {AuthenticationRequestInterceptor.class})
 public interface ProfileClient {
-    @GetMapping("/internal/users/{userId}")
+    @GetMapping("/auth/internal/users/{userId}")
     ApiResponse<ProfileGetResponse> getProfile(@PathVariable String userId);
 }
 

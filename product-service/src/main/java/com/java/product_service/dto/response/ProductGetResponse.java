@@ -19,7 +19,7 @@ public class ProductGetResponse {
     List<CloudinaryResponse> imgUrl;
     String categoryId;
     String name;
-
+    String description;
 
     ProfileGetResponse user;
 }

@@ -12,5 +12,4 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProductUpdateImageRequest {
     String productId;
-    List<String> idsDelete;
 }

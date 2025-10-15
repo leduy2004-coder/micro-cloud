@@ -2,7 +2,6 @@ package com.java.product_service.repository.httpClient;
 
 import com.java.common_dto.CloudinaryResponse;
 import com.java.common_dto.FileDeleteAllRequest;
-import com.java.common_dto.FileDeleteRequest;
 import com.java.product_service.config.security.AuthenticationRequestInterceptor;
 import com.java.product_service.dto.ApiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -26,7 +25,6 @@ public interface FileClient {
     @DeleteMapping(value = "/internal/file/delete-all-img")
     ApiResponse<Boolean> deleteAllImageProduct(@RequestBody FileDeleteAllRequest request);
 
-    @DeleteMapping(value = "/internal/file/delete-img-by-id")
-    ApiResponse<Boolean> deleteImageProduct(@RequestBody FileDeleteRequest request);
+
 }
 

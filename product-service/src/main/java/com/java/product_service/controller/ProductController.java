@@ -61,6 +61,18 @@ public class ProductController {
                 .result(response)
                 .build();
     }
+    @GetMapping(value = "/get-products-by-category/{categoryId}")
+    public ApiResponse<PageResponse<ProductGetResponse>> getProductByCategory(@RequestParam(defaultValue = "1") int page,
+                                                                          @RequestParam(defaultValue = "10") int size,
+                                                                          @PathVariable String categoryId
+    ) {
+
+        PageResponse<ProductGetResponse> response = productService.getProductsByCategoryId(page, size, categoryId);
+
+        return ApiResponse.<PageResponse<ProductGetResponse>>builder()
+                .result(response)
+                .build();
+    }
     @GetMapping(value = "/get-all-products")
     public ApiResponse<PageResponse<ProductGetResponse>> getAllProduct(@RequestParam(defaultValue = "1") int page,
                                                                        @RequestParam(defaultValue = "10") int size
@@ -72,6 +84,25 @@ public class ProductController {
                 .result(response)
                 .build();
     }
+
+    @GetMapping(value = "/search")
+    public ApiResponse<PageResponse<ProductGetResponse>> searchProducts(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String categoryId
+    ) {
+        PageResponse<ProductGetResponse> response = productService.searchProducts(
+                page, size, name, minPrice, maxPrice, categoryId
+        );
+
+        return ApiResponse.<PageResponse<ProductGetResponse>>builder()
+                .result(response)
+                .build();
+    }
+
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ProductCreateResponse> createProduct(
             @RequestPart("request") ProductCreateRequest request,
@@ -82,7 +113,7 @@ public class ProductController {
                 .build();
     }
 
-    @PostMapping(value = "/delete")
+    @DeleteMapping(value = "/delete")
     public ApiResponse<Boolean> deleteProduct(
             @RequestParam("productId") String productId) {
 
@@ -92,7 +123,7 @@ public class ProductController {
     }
 
 
-    @PutMapping(value = "/update/content")
+    @PatchMapping(value = "/update/content")
     public ApiResponse<ProductGetResponse> updateProduct(@RequestBody ProductUpdateRequest request){
         ProductGetResponse response = productService.updateProduct(request);
 

@@ -3,7 +3,6 @@ package com.java.file_service.controller.internal;
 
 import com.java.common_dto.CloudinaryResponse;
 import com.java.common_dto.FileDeleteAllRequest;
-import com.java.common_dto.FileDeleteRequest;
 import com.java.file_service.dto.ApiResponse;
 import com.java.file_service.service.FileService;
 import lombok.AccessLevel;

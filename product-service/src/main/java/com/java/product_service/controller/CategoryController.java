@@ -3,6 +3,7 @@ package com.java.product_service.controller;
 
 import com.java.product_service.dto.ApiResponse;
 import com.java.product_service.dto.request.CategoryCreateRequest;
+import com.java.product_service.dto.request.ProductUpdateImageRequest;
 import com.java.product_service.dto.response.CategoriesResponse;
 import com.java.product_service.service.CategoryService;
 import lombok.AccessLevel;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,18 +34,11 @@ public class CategoryController {
                 .build();
     }
 
-    @GetMapping(value = "/get-category/{categoryId}")
-    public ApiResponse<CategoriesResponse> getById(@PathVariable("categoryId") String categoryId) {
-
-        CategoriesResponse response = categoryService.getCategoryById(categoryId);
-
-        return ApiResponse.<CategoriesResponse>builder()
-                .result(response)
-                .build();
-    }
     @PostMapping(value = "/create")
-    public ApiResponse<CategoriesResponse> createCategory(@RequestBody CategoryCreateRequest categoryCreateRequest) {
-        CategoriesResponse response = categoryService.createCategory(categoryCreateRequest);
+    public ApiResponse<CategoriesResponse> createCategory(
+            @RequestPart("request") CategoryCreateRequest categoryCreateRequest,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        CategoriesResponse response = categoryService.createCategory(categoryCreateRequest,file);
         return ApiResponse.<CategoriesResponse>builder()
                 .result(response)
                 .build();

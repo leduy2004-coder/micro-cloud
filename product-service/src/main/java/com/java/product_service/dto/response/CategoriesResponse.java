@@ -1,5 +1,6 @@
 package com.java.product_service.dto.response;
 
+import com.java.common_dto.CloudinaryResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,4 +13,5 @@ import lombok.experimental.FieldDefaults;
 public class CategoriesResponse {
     String id;
     String name;
+    CloudinaryResponse img;
 }
