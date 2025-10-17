@@ -128,7 +128,7 @@ public class AuthenticationService {
         userName = jwtService.extractUserName(accessToken);
 
         if (userName != null) {
-            UserEntity user = userRepository.findByUsername(userName).orElse(null);
+            UserEntity user = userRepository.findById(userName).orElse(null);
 
             String refreshToken = tokenRedisService.getRefreshToken(userName);
             if (refreshToken == null) throw new AppException(ErrorCode.RE_TOKEN_EXPIRED);
