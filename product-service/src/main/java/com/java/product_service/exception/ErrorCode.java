@@ -32,12 +32,9 @@ public enum ErrorCode {
     INVALID_FILE_EXTENSION(1014, "Invalid file extension. Allowed extensions are jpg, png, gif, bmp", HttpStatus.BAD_REQUEST), // 400
     ALREADY_FOLLOWING(1015, "Already followed", HttpStatus.BAD_REQUEST),
     NOT_FOLLOWING(1016, "Unfollowed", HttpStatus.BAD_REQUEST),
-    OTP_EXPIRED(1019, "Expired OTP", HttpStatus.BAD_REQUEST),
-    PAYMENT_NOT_EXISTED(1020, "Payment not existed", HttpStatus.BAD_REQUEST),
     PRODUCT_USER_NOT_EXISTED(1021, "Product does not exist or does not belong to the user", HttpStatus.BAD_REQUEST),
-    BANNER_DATE_NOT_VALID(1022, "Banner has date not valid", HttpStatus.BAD_REQUEST),
-    BANNER_NOT_EXISTED(1023, "Banner not existed", HttpStatus.BAD_REQUEST),
     PRODUCT_NOT_UPDATE(1023, "Product not updated", HttpStatus.BAD_REQUEST),
+    COMMENT_NOT_OWNED(7002, "You are not the owner of this comment", HttpStatus.BAD_REQUEST),
 
     ;
 

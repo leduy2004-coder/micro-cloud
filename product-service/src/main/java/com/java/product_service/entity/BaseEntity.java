@@ -12,25 +12,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document // Đánh dấu đây là một MongoDB document (nếu là entity độc lập)
+@Document
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public abstract class BaseEntity {
 
-    @MongoId // Định danh ID trong MongoDB
+    @MongoId
     private String id;
 
     @CreatedDate
     @Field("created_date")
-    private LocalDateTime createdDate;
+    Instant createdDate;
 
 
     @LastModifiedDate
     @Field("modified_date")
-    private LocalDateTime modifiedDate;
+    Instant modifiedDate;
 }

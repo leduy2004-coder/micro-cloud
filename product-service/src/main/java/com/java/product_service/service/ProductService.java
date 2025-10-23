@@ -12,6 +12,7 @@ import com.java.product_service.dto.response.ProductGetResponse;
 import com.java.product_service.entity.ProductEntity;
 import com.java.product_service.exception.AppException;
 import com.java.product_service.exception.ErrorCode;
+import com.java.product_service.repository.CommentRepository;
 import com.java.product_service.repository.ProductRepository;
 import com.java.product_service.repository.httpClient.FileClient;
 import com.java.product_service.repository.httpClient.ProfileClient;
@@ -41,6 +42,7 @@ public class ProductService {
     ModelMapper modelMapper;
     FileClient fileClient;
     ProfileClient profileClient;
+    CommentRepository commentRepository;
 
     public ProductGetResponse getProductById(String productId) {
         ProductEntity product = productRepository.findById(productId)
@@ -160,11 +162,12 @@ public class ProductService {
 
     public boolean deleteProduct(String productId) {
         try {
+            deleteAllComment(productId);
             productRepository.deleteById(productId);
             fileClient.deleteAllImageProduct(FileDeleteAllRequest.builder().id(productId).build());
             return true;
         } catch (Exception e) {
-            log.error("Error deleting product by admin", e);
+            log.error("Error deleting product", e);
             return false;
         }
     }
@@ -181,5 +184,10 @@ public class ProductService {
         } catch (Exception e) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
+    }
+
+    public Boolean deleteAllComment(String productId) {
+        commentRepository.deleteAllByProductId(productId);
+        return true;
     }
 }

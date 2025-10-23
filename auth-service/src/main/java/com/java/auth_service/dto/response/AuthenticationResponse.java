@@ -18,6 +18,7 @@ public class AuthenticationResponse {
     String accessToken;
     @JsonProperty("refresh_token")
     String refreshToken;
+    String id;
     String nickName;
     String email;
     List<RoleResponse> roles;

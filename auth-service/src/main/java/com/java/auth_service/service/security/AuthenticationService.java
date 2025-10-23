@@ -107,6 +107,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .id(user.getId())
                 .nickName(user.getNickName())
                 .email(user.getEmail())
                 .roles(roles)
@@ -140,6 +141,7 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .nickName(user.getNickName())
                     .email(user.getEmail())
+                    .id(user.getId())
                     .accessToken(newAccessToken)
                     .refreshToken(newRefreshToken)
                     .build();
