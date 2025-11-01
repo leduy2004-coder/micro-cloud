@@ -1,6 +1,7 @@
 package com.java.product_service.service;
 
 
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.java.common_dto.ProfileGetResponse;
 import com.java.product_service.dto.PageResponse;
 import com.java.product_service.dto.request.CommentCreateRequest;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,11 +39,12 @@ public class CommentService {
 
     public CommentCreateResponse saveCommentProduct(CommentCreateRequest commentCreateRequest) {
         String userId = GetInfo.getLoggedInUserName();
+        CommentEntity commentEntity = new CommentEntity();
+        BeanUtils.copyProperties(commentCreateRequest, commentEntity, "userId");
 
-        CommentEntity postCommentEntity = modelMapper.map(commentCreateRequest, CommentEntity.class);
-        postCommentEntity.setUserId(userId);
+        commentEntity.setUserId(userId);
 
-        CommentEntity commentSave = commentRepository.save(postCommentEntity);
+        CommentEntity commentSave = commentRepository.save(commentEntity);
 
 
         return CommentCreateResponse.builder()

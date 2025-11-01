@@ -16,5 +16,4 @@ public class ProductImageEntity extends BaseEntity{
     String productId;
     String name;
     String url;
-    String publicId;
 }

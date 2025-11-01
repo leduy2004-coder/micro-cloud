@@ -28,7 +28,7 @@ public class ProductController {
     ProductService productService;
 
 
-    @GetMapping(value = "/get-detail-product/{productId}")
+    @GetMapping(value = "/{productId}")
     public ApiResponse<ProductGetResponse> getDetailProductById(@PathVariable("productId") String productId)  {
 
         ProductGetResponse response = productService.getProductById(productId);
